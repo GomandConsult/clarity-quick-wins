@@ -34,35 +34,44 @@
   --color-ring: var(--ring);
   --font-display: "Inter", system-ui, sans-serif;
   --font-sans: "Inter", system-ui, sans-serif;
-  --shadow-soft: 0 1px 2px oklch(0.2 0.04 250 / 0.04), 0 8px 24px oklch(0.2 0.04 250 / 0.06);
-  --shadow-elevated: 0 2px 4px oklch(0.2 0.04 250 / 0.05), 0 20px 40px -8px oklch(0.2 0.04 250 / 0.12);
-  --gradient-hero: radial-gradient(ellipse at top, oklch(0.96 0.03 230) 0%, oklch(0.99 0.005 230) 60%);
+  --shadow-soft: 0 1px 2px oklch(0.32 0.02 230 / 0.05), 0 8px 24px oklch(0.32 0.02 230 / 0.08);
+  --shadow-elevated: 0 2px 4px oklch(0.32 0.02 230 / 0.06), 0 20px 40px -8px oklch(0.32 0.02 230 / 0.14);
+  --gradient-hero: radial-gradient(ellipse at top, oklch(0.92 0.012 230) 0%, oklch(0.98 0.003 230) 60%);
 }
 
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.99 0.005 230);
-  --foreground: oklch(0.18 0.04 245);
+  /* Gomand Consult palette */
+  /* light bg #e4e3e2 → page bg uses near-white, soft surface uses this */
+  --background: oklch(0.99 0.002 90);
+  --foreground: oklch(0.32 0.018 230); /* #30434f */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.04 245);
+  --card-foreground: oklch(0.32 0.018 230);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.04 245);
-  --primary: oklch(0.42 0.13 245);
-  --primary-foreground: oklch(0.99 0.005 230);
-  --primary-soft: oklch(0.94 0.03 245);
-  --secondary: oklch(0.96 0.01 230);
-  --secondary-foreground: oklch(0.25 0.05 245);
-  --muted: oklch(0.96 0.008 230);
-  --muted-foreground: oklch(0.5 0.02 245);
-  --accent: oklch(0.78 0.14 75);
-  --accent-foreground: oklch(0.2 0.05 60);
-  --destructive: oklch(0.6 0.22 25);
-  --destructive-foreground: oklch(0.99 0.005 230);
-  --success: oklch(0.62 0.15 155);
-  --success-foreground: oklch(0.99 0.005 230);
-  --border: oklch(0.91 0.01 230);
-  --input: oklch(0.91 0.01 230);
-  --ring: oklch(0.42 0.13 245);
+  --popover-foreground: oklch(0.32 0.018 230);
+  /* Primary = #30434f */
+  --primary: oklch(0.32 0.018 230);
+  --primary-foreground: oklch(0.99 0.002 90);
+  /* Soft tint of light bg #e4e3e2 */
+  --primary-soft: oklch(0.91 0.003 90);
+  /* Secondary surface = #e4e3e2 */
+  --secondary: oklch(0.91 0.003 90);
+  --secondary-foreground: oklch(0.32 0.018 230);
+  --muted: oklch(0.93 0.003 90);
+  /* Text secondary #575659 */
+  --muted-foreground: oklch(0.42 0.004 290);
+  /* Accent / highlight #859CA6 */
+  --accent: oklch(0.66 0.024 230);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.58 0.2 25);
+  --destructive-foreground: oklch(0.99 0.002 90);
+  --success: oklch(0.6 0.13 155);
+  --success-foreground: oklch(0.99 0.002 90);
+  /* Borders / lines #687a82 used at low opacity → token kept light */
+  --border: oklch(0.87 0.005 230);
+  --input: oklch(0.87 0.005 230);
+  /* Focus ring = accent #859CA6 */
+  --ring: oklch(0.66 0.024 230);
 }
 
 @layer base {
