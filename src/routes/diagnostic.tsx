@@ -83,10 +83,10 @@ function Diagnostic() {
                         onClick={() => setAnswers({ ...answers, [q.id]: opt.value })}
                         aria-pressed={selected}
                         className={[
-                          "flex items-center justify-between gap-3 rounded-lg border-2 px-4 py-3 text-left text-sm font-medium transition-all",
+                          "flex items-center justify-between gap-3 rounded-lg border-2 px-4 py-3 text-left text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent",
                           selected
-                            ? "border-primary bg-primary text-primary-foreground shadow-[var(--shadow-soft)] ring-2 ring-primary/40"
-                            : "border-border bg-background hover:border-primary/40 hover:bg-primary-soft/40",
+                            ? "border-primary bg-secondary text-primary shadow-[var(--shadow-soft)]"
+                            : "border-border bg-background hover:border-primary/40 hover:bg-secondary/60",
                         ].join(" ")}
                       >
                         <span className="flex items-center gap-2">
@@ -95,7 +95,7 @@ function Diagnostic() {
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 20 20"
                               fill="currentColor"
-                              className="h-4 w-4 opacity-90"
+                              className="h-4 w-4 text-accent"
                               aria-hidden="true"
                             >
                               <path
@@ -107,7 +107,7 @@ function Diagnostic() {
                           )}
                           {opt.label}
                         </span>
-                        <span className={selected ? "text-primary-foreground/70" : "text-muted-foreground"}>
+                        <span className={selected ? "text-accent" : "text-muted-foreground"}>
                           {opt.value}
                         </span>
                       </button>
