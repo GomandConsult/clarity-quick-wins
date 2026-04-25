@@ -17,7 +17,7 @@ function Landing() {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--gradient-hero)" }}>
       <header className="mx-auto w-full max-w-5xl px-5 py-5">
-        <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+        <div className="flex items-center gap-2 text-sm font-medium text-foreground text-center">
           <span className="h-2 w-2 rounded-full bg-accent" />
           Marketing Clarity — 5 minutes
         </div>
