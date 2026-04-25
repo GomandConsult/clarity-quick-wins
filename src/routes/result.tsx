@@ -222,7 +222,7 @@ function Result() {
           </div>
 
           {/* Booking CTA */}
-          <div className="mt-6 overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary to-primary/80 p-7 text-primary-foreground shadow-[var(--shadow-elevated)] sm:p-10">
+          <div className="mt-6 overflow-hidden rounded-3xl border border-primary bg-primary p-7 text-primary-foreground shadow-[var(--shadow-elevated)] sm:p-10">
             <div className="text-xs font-medium uppercase tracking-[0.18em] opacity-70">
               Prochaine étape
             </div>
