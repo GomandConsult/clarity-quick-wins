@@ -51,14 +51,17 @@ function Diagnostic() {
           <div className="mb-8">
             <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
               <span>Étape {step + 1} sur {STEPS.length}</span>
-              <span>{Math.round(progress)} %</span>
+              <span>{Math.round(((step + 1) / STEPS.length) * 100)} %</span>
             </div>
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
               <div
                 className="h-full bg-primary transition-all duration-500 ease-out"
-                style={{ width: `${progress}%` }}
+                style={{ width: `${((step + (allAnsweredOnStep ? 1 : 0)) / STEPS.length) * 100}%` }}
               />
             </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              10 questions au total (2 par étape)
+            </p>
           </div>
 
           <div className="space-y-8">
@@ -78,14 +81,32 @@ function Diagnostic() {
                         key={opt.value}
                         type="button"
                         onClick={() => setAnswers({ ...answers, [q.id]: opt.value })}
+                        aria-pressed={selected}
                         className={[
-                          "flex items-center justify-between gap-3 rounded-lg border px-4 py-3 text-left text-sm font-medium transition-all",
+                          "flex items-center justify-between gap-3 rounded-lg border-2 px-4 py-3 text-left text-sm font-medium transition-all",
                           selected
-                            ? "border-primary bg-primary text-primary-foreground shadow-[var(--shadow-soft)] ring-2 ring-primary/30"
+                            ? "border-primary bg-primary text-primary-foreground shadow-[var(--shadow-soft)] ring-2 ring-primary/40"
                             : "border-border bg-background hover:border-primary/40 hover:bg-primary-soft/40",
                         ].join(" ")}
                       >
-                        <span>{opt.label}</span>
+                        <span className="flex items-center gap-2">
+                          {selected && (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              className="h-4 w-4 opacity-90"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.704 5.29a1 1 0 010 1.42l-7.5 7.5a1 1 0 01-1.42 0l-3.5-3.5a1 1 0 011.42-1.42L8.5 12.08l6.79-6.79a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          )}
+                          {opt.label}
+                        </span>
                         <span className={selected ? "text-primary-foreground/70" : "text-muted-foreground"}>
                           {opt.value}
                         </span>
@@ -97,24 +118,31 @@ function Diagnostic() {
             ))}
           </div>
 
-          <div className="mt-8 flex items-center justify-between">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <button
               type="button"
               onClick={() => setStep(Math.max(0, step - 1))}
               disabled={step === 0}
-              className="rounded-lg px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"
+              className="self-start rounded-lg px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"
             >
               ← Retour
             </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              disabled={!allAnsweredOnStep}
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-all hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0"
-            >
-              {isLast ? "Voir mon résultat" : "Continuer"}
-              <span>→</span>
-            </button>
+            <div className="flex flex-col items-end gap-1.5">
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={!allAnsweredOnStep}
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-all hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0"
+              >
+                {isLast ? "Voir mon résultat" : "Continuer"}
+                <span>→</span>
+              </button>
+              {!allAnsweredOnStep && (
+                <p className="text-xs text-muted-foreground">
+                  Choisissez une réponse pour continuer.
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </main>
