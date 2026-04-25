@@ -36,7 +36,7 @@ function Diagnostic() {
       const result = computeResult(answers);
       sessionStorage.setItem("mc_answers", JSON.stringify(answers));
       sessionStorage.setItem("mc_result", JSON.stringify(result));
-      navigate({ to: "/result" });
+      navigate({ to: "/email" });
     } else {
       setStep(step + 1);
     }
