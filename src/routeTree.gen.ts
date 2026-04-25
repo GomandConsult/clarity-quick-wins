@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResultRouteImport } from './routes/result'
 import { Route as DiagnosticRouteImport } from './routes/diagnostic'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiSendReportRouteImport } from './routes/api.send-report'
 
 const ResultRoute = ResultRouteImport.update({
   id: '/result',
@@ -28,35 +29,44 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSendReportRoute = ApiSendReportRouteImport.update({
+  id: '/api/send-report',
+  path: '/api/send-report',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/diagnostic': typeof DiagnosticRoute
   '/result': typeof ResultRoute
+  '/api/send-report': typeof ApiSendReportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/diagnostic': typeof DiagnosticRoute
   '/result': typeof ResultRoute
+  '/api/send-report': typeof ApiSendReportRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/diagnostic': typeof DiagnosticRoute
   '/result': typeof ResultRoute
+  '/api/send-report': typeof ApiSendReportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/diagnostic' | '/result'
+  fullPaths: '/' | '/diagnostic' | '/result' | '/api/send-report'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/diagnostic' | '/result'
-  id: '__root__' | '/' | '/diagnostic' | '/result'
+  to: '/' | '/diagnostic' | '/result' | '/api/send-report'
+  id: '__root__' | '/' | '/diagnostic' | '/result' | '/api/send-report'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DiagnosticRoute: typeof DiagnosticRoute
   ResultRoute: typeof ResultRoute
+  ApiSendReportRoute: typeof ApiSendReportRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/send-report': {
+      id: '/api/send-report'
+      path: '/api/send-report'
+      fullPath: '/api/send-report'
+      preLoaderRoute: typeof ApiSendReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DiagnosticRoute: DiagnosticRoute,
   ResultRoute: ResultRoute,
+  ApiSendReportRoute: ApiSendReportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
