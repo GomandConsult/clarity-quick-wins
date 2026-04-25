@@ -44,7 +44,7 @@ function Landing() {
           <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
             <Link
               to="/diagnostic"
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[var(--shadow-elevated)] transition-all hover:translate-y-[-1px] hover:shadow-[var(--shadow-elevated)]"
+              className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[var(--shadow-elevated)] transition-all hover:translate-y-[-1px] hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             >
               Commencer (5 minutes)
               <span className="ml-2">→</span>
