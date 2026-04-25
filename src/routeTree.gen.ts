@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResultRouteImport } from './routes/result'
+import { Route as EmailRouteImport } from './routes/email'
 import { Route as DiagnosticRouteImport } from './routes/diagnostic'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSendReportRouteImport } from './routes/api.send-report'
@@ -18,6 +19,11 @@ import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/e
 const ResultRoute = ResultRouteImport.update({
   id: '/result',
   path: '/result',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmailRoute = EmailRouteImport.update({
+  id: '/email',
+  path: '/email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DiagnosticRoute = DiagnosticRouteImport.update({
@@ -45,6 +51,7 @@ const LovableEmailQueueProcessRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/diagnostic': typeof DiagnosticRoute
+  '/email': typeof EmailRoute
   '/result': typeof ResultRoute
   '/api/send-report': typeof ApiSendReportRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -52,6 +59,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/diagnostic': typeof DiagnosticRoute
+  '/email': typeof EmailRoute
   '/result': typeof ResultRoute
   '/api/send-report': typeof ApiSendReportRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -60,6 +68,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/diagnostic': typeof DiagnosticRoute
+  '/email': typeof EmailRoute
   '/result': typeof ResultRoute
   '/api/send-report': typeof ApiSendReportRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -69,6 +78,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/diagnostic'
+    | '/email'
     | '/result'
     | '/api/send-report'
     | '/lovable/email/queue/process'
@@ -76,6 +86,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/diagnostic'
+    | '/email'
     | '/result'
     | '/api/send-report'
     | '/lovable/email/queue/process'
@@ -83,6 +94,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/diagnostic'
+    | '/email'
     | '/result'
     | '/api/send-report'
     | '/lovable/email/queue/process'
@@ -91,6 +103,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DiagnosticRoute: typeof DiagnosticRoute
+  EmailRoute: typeof EmailRoute
   ResultRoute: typeof ResultRoute
   ApiSendReportRoute: typeof ApiSendReportRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -103,6 +116,13 @@ declare module '@tanstack/react-router' {
       path: '/result'
       fullPath: '/result'
       preLoaderRoute: typeof ResultRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/email': {
+      id: '/email'
+      path: '/email'
+      fullPath: '/email'
+      preLoaderRoute: typeof EmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/diagnostic': {
@@ -139,6 +159,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DiagnosticRoute: DiagnosticRoute,
+  EmailRoute: EmailRoute,
   ResultRoute: ResultRoute,
   ApiSendReportRoute: ApiSendReportRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
