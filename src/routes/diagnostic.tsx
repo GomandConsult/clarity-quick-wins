@@ -55,7 +55,7 @@ function Diagnostic() {
             </div>
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
               <div
-                className="h-full bg-primary transition-all duration-500 ease-out"
+                className="h-full bg-accent transition-all duration-500 ease-out"
                 style={{ width: `${((step + (allAnsweredOnStep ? 1 : 0)) / STEPS.length) * 100}%` }}
               />
             </div>
@@ -83,10 +83,10 @@ function Diagnostic() {
                         onClick={() => setAnswers({ ...answers, [q.id]: opt.value })}
                         aria-pressed={selected}
                         className={[
-                          "flex items-center justify-between gap-3 rounded-lg border-2 px-4 py-3 text-left text-sm font-medium transition-all",
+                          "flex items-center justify-between gap-3 rounded-lg border-2 px-4 py-3 text-left text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent",
                           selected
-                            ? "border-primary bg-primary text-primary-foreground shadow-[var(--shadow-soft)] ring-2 ring-primary/40"
-                            : "border-border bg-background hover:border-primary/40 hover:bg-primary-soft/40",
+                            ? "border-primary bg-secondary text-primary shadow-[var(--shadow-soft)]"
+                            : "border-border bg-background hover:border-primary/40 hover:bg-secondary/60",
                         ].join(" ")}
                       >
                         <span className="flex items-center gap-2">
@@ -95,7 +95,7 @@ function Diagnostic() {
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 20 20"
                               fill="currentColor"
-                              className="h-4 w-4 opacity-90"
+                              className="h-4 w-4 text-accent"
                               aria-hidden="true"
                             >
                               <path
@@ -107,7 +107,7 @@ function Diagnostic() {
                           )}
                           {opt.label}
                         </span>
-                        <span className={selected ? "text-primary-foreground/70" : "text-muted-foreground"}>
+                        <span className={selected ? "text-accent" : "text-muted-foreground"}>
                           {opt.value}
                         </span>
                       </button>
@@ -132,7 +132,7 @@ function Diagnostic() {
                 type="button"
                 onClick={handleNext}
                 disabled={!allAnsweredOnStep}
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-all hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-all hover:translate-y-[-1px] hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0"
               >
                 {isLast ? "Voir mon résultat" : "Continuer"}
                 <span>→</span>

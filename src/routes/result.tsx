@@ -118,7 +118,7 @@ function Result() {
                     </div>
                     <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-secondary">
                       <div
-                        className={isPriority ? "h-full bg-accent" : "h-full bg-primary/70"}
+                        className="h-full bg-primary"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -162,7 +162,7 @@ function Result() {
                     key={i}
                     className="flex gap-4 rounded-xl border border-border bg-card p-4"
                   >
-                    <span className="flex h-7 shrink-0 items-center rounded-md bg-primary px-2 text-xs font-semibold text-primary-foreground">
+                    <span className="flex h-7 shrink-0 items-center rounded-md border border-muted-foreground/40 bg-secondary px-2 text-xs font-semibold text-primary border-l-4 border-l-accent">
                       {qw.time}
                     </span>
                     <span className="text-sm leading-relaxed">{qw.text}</span>
@@ -213,7 +213,7 @@ function Result() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-all hover:translate-y-[-1px] disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-all hover:translate-y-[-1px] hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-50"
                 >
                   {sending ? "Envoi…" : "Recevoir mon mini-rapport"}
                 </button>
@@ -222,7 +222,7 @@ function Result() {
           </div>
 
           {/* Booking CTA */}
-          <div className="mt-6 overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary to-primary/80 p-7 text-primary-foreground shadow-[var(--shadow-elevated)] sm:p-10">
+          <div className="mt-6 overflow-hidden rounded-3xl border border-primary bg-primary p-7 text-primary-foreground shadow-[var(--shadow-elevated)] sm:p-10">
             <div className="text-xs font-medium uppercase tracking-[0.18em] opacity-70">
               Prochaine étape
             </div>
@@ -238,7 +238,7 @@ function Result() {
                 href={BOOKING_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3.5 text-base font-semibold text-accent-foreground shadow-[var(--shadow-elevated)] transition-all hover:translate-y-[-1px]"
+                className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3.5 text-base font-semibold text-accent-foreground shadow-[var(--shadow-elevated)] transition-all hover:translate-y-[-1px] hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-background focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
               >
                 Réserver mon follow-up gratuit (45 min)
                 <span>→</span>
