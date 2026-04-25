@@ -27,7 +27,7 @@ function Landing() {
 
           <h1 className="mt-6 text-4xl font-semibold leading-[1.05] sm:text-6xl">
             Trouvez votre priorité marketing&nbsp;<span className="text-primary">#1</span>
-            <span className="block text-muted-foreground/90 italic font-normal mt-1 text-5xl">
+            <span className="block text-muted-foreground/90 italic mt-1 text-5xl font-light">
               (et arrêtez de vous disperser).
             </span>
           </h1>
@@ -40,7 +40,7 @@ function Landing() {
           <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
             <Link
               to="/diagnostic"
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[var(--shadow-elevated)] transition-all hover:translate-y-[-1px] hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[var(--shadow-elevated)] transition-all hover:translate-y-[-1px] hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 bg-slate-600"
             >
               Commencer (5 minutes)
               <span className="ml-2">→</span>
@@ -57,8 +57,8 @@ function Landing() {
               { n: "03", t: "Avancez", d: "Mini-rapport par email + option de follow-up." },
             ].map((s) => (
               <div key={s.n} className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow-soft)]">
-                <div className="font-display text-2xl text-primary">{s.n}</div>
-                <div className="mt-2 font-semibold">{s.t}</div>
+                <div className="font-display text-2xl text-primary text-slate-600">{s.n}</div>
+                <div className="mt-2 font-semibold text-slate-600">{s.t}</div>
                 <p className="mt-1 text-sm text-muted-foreground">{s.d}</p>
               </div>
             ))}
