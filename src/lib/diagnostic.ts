@@ -111,8 +111,8 @@ export const PILLARS: Record<PillarKey, Pillar> = {
 };
 
 export function scoreLabel(total: number): string {
-  if (total <= 10) return "À clarifier";
-  if (total <= 20) return "En progression";
+  if (total <= 12) return "À clarifier";
+  if (total <= 22) return "En progression";
   return "Solide";
 }
 

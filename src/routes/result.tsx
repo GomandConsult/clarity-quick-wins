@@ -112,7 +112,7 @@ function Result() {
                     <div className="flex items-center justify-between text-sm">
                       <span className={isPriority ? "font-semibold text-primary" : "text-foreground/80"}>
                         {PILLARS[k].name}
-                        {isPriority && <span className="ml-2 text-xs uppercase tracking-wider">· priorité</span>}
+                        {isPriority && <span className="ml-2 text-xs uppercase tracking-wider">· point de départ</span>}
                       </span>
                       <span className="tabular-nums text-muted-foreground">{result.pillarScores[k]}/6</span>
                     </div>
@@ -126,12 +126,22 @@ function Result() {
                 );
               })}
             </div>
+            {(() => {
+              const scores = Object.values(result.pillarScores);
+              const min = Math.min(...scores);
+              const tied = scores.filter((s) => s === min).length > 1;
+              return tied ? (
+                <p className="mt-4 text-xs text-muted-foreground">
+                  Scores très proches : nous avons choisi un point de départ pour vous aider à avancer.
+                </p>
+              ) : null;
+            })()}
           </div>
 
           {/* Priority */}
           <div className="mt-6 rounded-3xl border border-primary/20 bg-primary-soft/50 p-7 sm:p-9">
             <div className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
-              Votre priorité #1
+              Point de départ
             </div>
             <h2 className="mt-2 font-display text-3xl font-semibold leading-tight sm:text-4xl">
               {priority.name}
@@ -170,6 +180,9 @@ function Result() {
             <p className="mt-2 text-sm text-muted-foreground">
               Une copie de votre score, votre priorité et vos 3 quick wins, directement dans votre boîte.
             </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Score + priorité #1 + 3 quick wins.
+            </p>
 
             {sent ? (
               <div className="mt-5 rounded-lg border border-success/30 bg-success/10 p-4 text-sm text-success">
@@ -193,7 +206,7 @@ function Result() {
                     className="mt-0.5 h-4 w-4 rounded border-input"
                   />
                   <span>
-                    J'accepte de recevoir mon mini-rapport par email. Pas de spam, vous pouvez vous désinscrire à tout moment.
+                    J'accepte de recevoir mon mini-rapport par email. Vous pouvez vous désinscrire à tout moment.
                   </span>
                 </label>
                 {error && <p className="text-sm text-destructive">{error}</p>}
@@ -214,12 +227,11 @@ function Result() {
               Prochaine étape
             </div>
             <h3 className="mt-2 font-display text-3xl font-semibold leading-tight sm:text-4xl">
-              Vous voulez un avis extérieur et un plan clair ?
+              Un avis extérieur et un plan clair ?
             </h3>
             <p className="mt-4 max-w-2xl text-base leading-relaxed opacity-90">
-              Nous vous proposons un follow-up gratuit de 45 minutes pour relire votre mini-rapport,
-              valider votre priorité #1 et choisir les 2–3 actions les plus utiles pour les 30 prochains jours.
-              Sans engagement.
+              45 min gratuites pour relire votre rapport, confirmer votre point de départ et choisir
+              2–3 actions concrètes pour les 30 prochains jours. Sans engagement.
             </p>
             <div className="mt-6">
               <a
