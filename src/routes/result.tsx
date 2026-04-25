@@ -53,6 +53,11 @@ function Result() {
       <BrandHeader />
       <main className="flex-1">
         <div className="mx-auto max-w-3xl px-5 py-10 sm:py-14">
+          {sentTo && (
+            <div className="mb-6 rounded-2xl border border-success/30 bg-success/10 p-4 text-sm text-success">
+              ✓ Une copie de votre mini-rapport a été envoyée à <strong>{sentTo}</strong>.
+            </div>
+          )}
           {/* Score block */}
           <div className="rounded-3xl border border-border bg-card p-7 shadow-[var(--shadow-soft)] sm:p-10">
             <div className="text-xs font-medium uppercase tracking-[0.18em] text-primary/70">
