@@ -1,7 +1,6 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
@@ -33,38 +32,37 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-display: "Montserrat", system-ui, sans-serif;
-  --font-sans: "Montserrat", system-ui, sans-serif;
-  --shadow-soft: 0 1px 2px oklch(0.3 0.02 220 / 0.04), 0 8px 24px oklch(0.3 0.02 220 / 0.06);
-  --shadow-elevated: 0 2px 4px oklch(0.3 0.02 220 / 0.05), 0 20px 40px -8px oklch(0.3 0.02 220 / 0.12);
-  --gradient-hero: radial-gradient(ellipse at top, oklch(0.95 0.012 220) 0%, oklch(0.97 0.005 220) 60%);
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --shadow-soft: 0 1px 2px oklch(0.2 0.04 250 / 0.04), 0 8px 24px oklch(0.2 0.04 250 / 0.06);
+  --shadow-elevated: 0 2px 4px oklch(0.2 0.04 250 / 0.05), 0 20px 40px -8px oklch(0.2 0.04 250 / 0.12);
+  --gradient-hero: radial-gradient(ellipse at top, oklch(0.96 0.03 230) 0%, oklch(0.99 0.005 230) 60%);
 }
 
 :root {
-  --radius: 0.5rem;
-  /* Brand: #F1F3F5 background, #324A59 primary deep slate, #5A6E73 / #687E8C / #859CA6 supporting, #393F40 charcoal */
-  --background: oklch(0.97 0.003 230);
-  --foreground: oklch(0.28 0.015 230);
+  --radius: 0.75rem;
+  --background: oklch(0.99 0.005 230);
+  --foreground: oklch(0.18 0.04 245);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.28 0.015 230);
+  --card-foreground: oklch(0.18 0.04 245);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.28 0.015 230);
-  --primary: oklch(0.39 0.03 230);
-  --primary-foreground: oklch(0.97 0.003 230);
-  --primary-soft: oklch(0.92 0.012 230);
-  --secondary: oklch(0.93 0.008 220);
-  --secondary-foreground: oklch(0.32 0.02 230);
-  --muted: oklch(0.94 0.005 220);
-  --muted-foreground: oklch(0.5 0.018 225);
-  --accent: oklch(0.65 0.025 225);
-  --accent-foreground: oklch(0.97 0.003 230);
-  --destructive: oklch(0.58 0.2 25);
-  --destructive-foreground: oklch(0.97 0.003 230);
-  --success: oklch(0.6 0.12 165);
-  --success-foreground: oklch(0.97 0.003 230);
-  --border: oklch(0.88 0.008 225);
-  --input: oklch(0.88 0.008 225);
-  --ring: oklch(0.39 0.03 230);
+  --popover-foreground: oklch(0.18 0.04 245);
+  --primary: oklch(0.42 0.13 245);
+  --primary-foreground: oklch(0.99 0.005 230);
+  --primary-soft: oklch(0.94 0.03 245);
+  --secondary: oklch(0.96 0.01 230);
+  --secondary-foreground: oklch(0.25 0.05 245);
+  --muted: oklch(0.96 0.008 230);
+  --muted-foreground: oklch(0.5 0.02 245);
+  --accent: oklch(0.78 0.14 75);
+  --accent-foreground: oklch(0.2 0.05 60);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.99 0.005 230);
+  --success: oklch(0.62 0.15 155);
+  --success-foreground: oklch(0.99 0.005 230);
+  --border: oklch(0.91 0.01 230);
+  --input: oklch(0.91 0.01 230);
+  --ring: oklch(0.42 0.13 245);
 }
 
 @layer base {
@@ -86,7 +84,6 @@
 
   h1, h2, h3 {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
 }
