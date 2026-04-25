@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as ResultRouteImport } from './routes/result'
 import { Route as EmailRouteImport } from './routes/email'
 import { Route as DiagnosticRouteImport } from './routes/diagnostic'
@@ -20,6 +21,11 @@ import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lova
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResultRoute = ResultRouteImport.update({
   id: '/result',
   path: '/result',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/diagnostic': typeof DiagnosticRoute
   '/email': typeof EmailRouteWithChildren
   '/result': typeof ResultRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/api/send-report': typeof ApiSendReportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/diagnostic': typeof DiagnosticRoute
   '/email': typeof EmailRouteWithChildren
   '/result': typeof ResultRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/api/send-report': typeof ApiSendReportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/diagnostic': typeof DiagnosticRoute
   '/email': typeof EmailRouteWithChildren
   '/result': typeof ResultRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/api/send-report': typeof ApiSendReportRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/diagnostic'
     | '/email'
     | '/result'
+    | '/unsubscribe'
     | '/api/send-report'
     | '/email/unsubscribe'
     | '/lovable/email/suppression'
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/diagnostic'
     | '/email'
     | '/result'
+    | '/unsubscribe'
     | '/api/send-report'
     | '/email/unsubscribe'
     | '/lovable/email/suppression'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/diagnostic'
     | '/email'
     | '/result'
+    | '/unsubscribe'
     | '/api/send-report'
     | '/email/unsubscribe'
     | '/lovable/email/suppression'
@@ -155,6 +167,7 @@ export interface RootRouteChildren {
   DiagnosticRoute: typeof DiagnosticRoute
   EmailRoute: typeof EmailRouteWithChildren
   ResultRoute: typeof ResultRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
   ApiSendReportRoute: typeof ApiSendReportRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -164,6 +177,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/result': {
       id: '/result'
       path: '/result'
@@ -252,6 +272,7 @@ const rootRouteChildren: RootRouteChildren = {
   DiagnosticRoute: DiagnosticRoute,
   EmailRoute: EmailRouteWithChildren,
   ResultRoute: ResultRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
   ApiSendReportRoute: ApiSendReportRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
