@@ -5,7 +5,6 @@ import {
   Container,
   Head,
   Heading,
-  Hr,
   Html,
   Preview,
   Section,
@@ -15,6 +14,19 @@ import type { TemplateEntry } from './registry'
 
 const SITE_NAME = 'Gomand Consult'
 const BOOKING_URL = 'https://calendar.notion.so/meet/gomandconsult/premiereconsultation'
+
+// Gomand palette
+const C = {
+  primary: '#30434f',
+  accent: '#859CA6',
+  surface: '#e4e3e2',
+  text: '#30434f',
+  text2: '#575659',
+  muted: '#687a82',
+  white: '#ffffff',
+  primarySoft: '#f1f3f4',
+  border: '#e4e3e2',
+}
 
 const PILLAR_NAMES: Record<string, string> = {
   offer: 'Offre & différenciation',
@@ -82,6 +94,8 @@ interface DiagnosticReportProps {
   pillarScores?: Record<string, number>
 }
 
+const PILLAR_ORDER = ['offer', 'audience', 'conversion', 'acquisition', 'measurement']
+
 const DiagnosticReportEmail = ({
   total = 15,
   label = 'En progression',
@@ -91,97 +105,137 @@ const DiagnosticReportEmail = ({
   const priorityName = PILLAR_NAMES[priority] ?? PILLAR_NAMES.offer
   const explanation = PILLAR_EXPLANATION[priority] ?? PILLAR_EXPLANATION.offer
   const wins = QUICK_WINS[priority] ?? QUICK_WINS.offer
-  const pillarKeys = Object.keys(PILLAR_NAMES)
 
   return (
     <Html lang="fr" dir="ltr">
       <Head />
-      <Preview>Votre mini-diagnostic marketing — score, priorité #1 et 3 quick wins</Preview>
+      <Preview>Votre mini-diagnostic marketing — score, point de départ et 3 quick wins</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Section style={headerSection}>
-            <Text style={kicker}>Marketing Clarity · {SITE_NAME}</Text>
-            <Heading style={h1}>Votre mini-diagnostic marketing</Heading>
-            <Text style={lead}>
-              Voici votre score, votre priorité #1 et 3 actions concrètes pour avancer.
-            </Text>
+          {/* ===== Score block ===== */}
+          <Section style={card}>
+            <Text style={kicker}>Votre mini-rapport</Text>
+
+            <table width="100%" cellPadding={0} cellSpacing={0} role="presentation" style={{ marginTop: 14 }}>
+              <tbody>
+                <tr>
+                  <td style={scoreNumberCell}>
+                    <span style={scoreNumber}>{total}</span>
+                    <span style={scoreDenominator}>/30</span>
+                  </td>
+                  <td style={scoreLevelCell} align="left">
+                    <div style={scoreLevelKicker}>Niveau</div>
+                    <div style={scoreLevelValue}>{label}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* Pillar bars */}
+            <div style={{ marginTop: 24 }}>
+              {PILLAR_ORDER.map((k) => {
+                const value = pillarScores[k] ?? 0
+                const pct = Math.max(0, Math.min(100, (value / 6) * 100))
+                const isPriority = k === priority
+                return (
+                  <div key={k} style={{ marginBottom: 12 }}>
+                    <table width="100%" cellPadding={0} cellSpacing={0} role="presentation">
+                      <tbody>
+                        <tr>
+                          <td style={isPriority ? pillarLabelPriority : pillarLabel}>
+                            {PILLAR_NAMES[k]}
+                            {isPriority && (
+                              <span style={pillarTag}> · point de départ</span>
+                            )}
+                          </td>
+                          <td align="right" style={pillarValue}>
+                            {value}/6
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    {/* Bar */}
+                    <table
+                      width="100%"
+                      cellPadding={0}
+                      cellSpacing={0}
+                      role="presentation"
+                      style={barTrack}
+                    >
+                      <tbody>
+                        <tr>
+                          <td
+                            style={{
+                              ...barFill,
+                              width: `${pct}%`,
+                            }}
+                          >
+                            &nbsp;
+                          </td>
+                          <td style={{ width: `${100 - pct}%` }}>&nbsp;</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )
+              })}
+            </div>
           </Section>
 
-          <Section style={scoreCard}>
-            <Text style={scoreNumber}>
-              {total}
-              <span style={scoreDenominator}> / 30</span>
-            </Text>
-            <Text style={scoreLabel}>
-              Niveau : <strong style={{ color: '#30434f' }}>{label}</strong>
-            </Text>
-          </Section>
-
-          <Section style={section}>
-            <Text style={sectionLabel}>Détail par pilier</Text>
-            {pillarKeys.map((k) => {
-              const isPriority = k === priority
-              return (
-                <table key={k} width="100%" cellPadding={0} cellSpacing={0} role="presentation" style={pillarRow}>
-                  <tbody>
-                    <tr>
-                      <td style={{ ...pillarName, ...(isPriority ? pillarPriority : {}) }}>
-                        {PILLAR_NAMES[k]}
-                        {isPriority ? ' · priorité' : ''}
-                      </td>
-                      <td align="right" style={pillarScore}>
-                        {pillarScores[k] ?? 0}/6
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              )
-            })}
-          </Section>
-
-          <Section style={section}>
-            <Text style={kickerAccent}>Votre priorité #1</Text>
-            <Heading as="h2" style={h2}>
+          {/* ===== Priority block ===== */}
+          <Section style={priorityCard}>
+            <Text style={kickerPrimary}>Point de départ</Text>
+            <Heading as="h2" style={priorityTitle}>
               {priorityName}
             </Heading>
             {explanation.map((p, i) => (
-              <Text key={i} style={paragraph}>
+              <Text key={i} style={priorityParagraph}>
                 {p}
               </Text>
             ))}
-          </Section>
 
-          <Section style={section}>
-            <Text style={kickerAccent}>3 quick wins</Text>
+            <Text style={quickWinsKicker}>3 quick wins</Text>
             {wins.map((qw, i) => (
-              <Section key={i} style={winCard}>
-                <Text style={winText}>
-                  <span style={winBadge}>{qw.time}</span>
-                  {qw.text}
-                </Text>
-              </Section>
+              <table
+                key={i}
+                width="100%"
+                cellPadding={0}
+                cellSpacing={0}
+                role="presentation"
+                style={winCard}
+              >
+                <tbody>
+                  <tr>
+                    <td style={winBadgeCell}>
+                      <span style={winBadge}>{qw.time}</span>
+                    </td>
+                    <td style={winTextCell}>{qw.text}</td>
+                  </tr>
+                </tbody>
+              </table>
             ))}
           </Section>
 
+          {/* ===== CTA block ===== */}
           <Section style={ctaCard}>
             <Text style={ctaKicker}>Prochaine étape</Text>
             <Heading as="h3" style={ctaTitle}>
-              Un follow-up gratuit de 45 minutes
+              Un avis extérieur et un plan clair ?
             </Heading>
             <Text style={ctaParagraph}>
-              Nous relisons ensemble votre mini-rapport, validons votre priorité #1 et choisissons
-              les 2–3 actions les plus utiles pour les 30 prochains jours. Sans engagement.
+              45 min gratuites pour relire votre rapport, confirmer votre point de départ et choisir
+              2–3 actions concrètes pour les 30 prochains jours. Sans engagement.
             </Text>
             <Button href={BOOKING_URL} style={ctaButton}>
-              Réserver mon follow-up gratuit (45 min)
+              Réserver mon follow-up gratuit (45 min) →
             </Button>
             <Text style={ctaFooter}>En visio · 45 min · Plan simple et priorisé</Text>
           </Section>
 
-          <Hr style={hr} />
           <Text style={footer}>
             Vous recevez cet email parce que vous avez complété le mini-diagnostic Marketing Clarity.
-            <br />— {SITE_NAME}
+            <br />
+            <strong style={{ color: C.primary }}>{SITE_NAME}</strong>
           </Text>
         </Container>
       </Body>
@@ -191,7 +245,7 @@ const DiagnosticReportEmail = ({
 
 export const template = {
   component: DiagnosticReportEmail,
-  subject: 'Votre mini-diagnostic marketing (score + priorité #1)',
+  subject: 'Votre mini-diagnostic marketing (score + point de départ)',
   displayName: 'Diagnostic report',
   previewData: {
     total: 18,
@@ -201,175 +255,253 @@ export const template = {
   },
 } satisfies TemplateEntry
 
-// ===== Styles (Gomand palette) =====
-// Primary #30434f · Accent #859CA6 · Light bg #e4e3e2 · Text 2nd #575659 · Muted #687a82
+// ===== Styles =====
 const main: React.CSSProperties = {
-  backgroundColor: '#ffffff',
+  backgroundColor: C.surface,
   fontFamily: 'Inter, Arial, Helvetica, sans-serif',
-  color: '#30434f',
+  color: C.text,
   margin: 0,
-  padding: '32px 16px',
+  padding: '32px 12px',
 }
+
 const container: React.CSSProperties = {
-  maxWidth: '600px',
+  maxWidth: '620px',
   margin: '0 auto',
-  backgroundColor: '#ffffff',
-  borderRadius: '16px',
-  border: '1px solid #e4e3e2',
-  overflow: 'hidden',
 }
-const headerSection: React.CSSProperties = { padding: '32px 32px 8px 32px' }
+
+const card: React.CSSProperties = {
+  backgroundColor: C.white,
+  borderRadius: '20px',
+  border: `1px solid ${C.border}`,
+  padding: '28px 24px',
+  marginBottom: '16px',
+}
+
 const kicker: React.CSSProperties = {
   fontSize: '11px',
   letterSpacing: '0.18em',
   textTransform: 'uppercase',
-  color: '#859CA6',
+  color: C.accent,
   fontWeight: 600,
   margin: 0,
 }
-const kickerAccent: React.CSSProperties = { ...kicker, color: '#30434f', marginBottom: '8px' }
-const h1: React.CSSProperties = {
-  fontFamily: 'Georgia, "Times New Roman", serif',
-  fontSize: '26px',
-  lineHeight: 1.2,
-  color: '#30434f',
-  margin: '12px 0 6px',
-  fontWeight: 600,
-}
-const h2: React.CSSProperties = {
-  fontFamily: 'Georgia, "Times New Roman", serif',
-  fontSize: '22px',
-  color: '#30434f',
-  margin: '4px 0 10px',
-  fontWeight: 600,
-}
-const lead: React.CSSProperties = { fontSize: '14px', color: '#575659', margin: 0, lineHeight: 1.55 }
 
-const scoreCard: React.CSSProperties = {
-  margin: '20px 32px 8px',
-  backgroundColor: '#e4e3e2',
-  borderRadius: '12px',
-  borderLeft: '4px solid #859CA6',
-  padding: '20px 22px',
+const kickerPrimary: React.CSSProperties = {
+  ...kicker,
+  color: C.primary,
 }
+
+const scoreNumberCell: React.CSSProperties = {
+  verticalAlign: 'bottom',
+  paddingRight: '20px',
+  whiteSpace: 'nowrap',
+}
+
 const scoreNumber: React.CSSProperties = {
   fontFamily: 'Georgia, "Times New Roman", serif',
-  fontSize: '42px',
-  color: '#30434f',
-  lineHeight: 1,
+  fontSize: '64px',
   fontWeight: 600,
-  margin: 0,
+  color: C.primary,
+  lineHeight: 1,
 }
-const scoreDenominator: React.CSSProperties = { fontSize: '20px', color: '#687a82', fontWeight: 400 }
-const scoreLabel: React.CSSProperties = { fontSize: '14px', color: '#575659', marginTop: '6px', marginBottom: 0 }
 
-const section: React.CSSProperties = { padding: '20px 32px 4px' }
-const sectionLabel: React.CSSProperties = {
+const scoreDenominator: React.CSSProperties = {
+  fontSize: '28px',
+  color: C.muted,
+  fontWeight: 400,
+  marginLeft: '4px',
+}
+
+const scoreLevelCell: React.CSSProperties = {
+  verticalAlign: 'bottom',
+  paddingBottom: '6px',
+}
+
+const scoreLevelKicker: React.CSSProperties = {
   fontSize: '11px',
+  letterSpacing: '0.14em',
+  textTransform: 'uppercase',
+  color: C.muted,
+  fontWeight: 500,
+  marginBottom: '4px',
+}
+
+const scoreLevelValue: React.CSSProperties = {
+  fontSize: '20px',
+  fontWeight: 600,
+  color: C.primary,
+}
+
+const pillarLabel: React.CSSProperties = {
+  fontSize: '13px',
+  color: C.text2,
+  fontWeight: 400,
+  paddingBottom: '6px',
+}
+
+const pillarLabelPriority: React.CSSProperties = {
+  ...pillarLabel,
+  color: C.primary,
+  fontWeight: 600,
+}
+
+const pillarTag: React.CSSProperties = {
+  fontSize: '10px',
   letterSpacing: '0.12em',
   textTransform: 'uppercase',
-  color: '#687a82',
+  color: C.accent,
   fontWeight: 600,
-  margin: '0 0 8px',
-}
-const pillarRow: React.CSSProperties = { borderBottom: '1px solid #e4e3e2' }
-const pillarName: React.CSSProperties = {
-  padding: '10px 0',
-  fontSize: '13px',
-  color: '#575659',
-  fontWeight: 400,
-}
-const pillarPriority: React.CSSProperties = { color: '#30434f', fontWeight: 600 }
-const pillarScore: React.CSSProperties = {
-  padding: '10px 0',
-  fontSize: '13px',
-  color: '#687a82',
-  fontWeight: 500,
+  marginLeft: '4px',
 }
 
-const paragraph: React.CSSProperties = {
-  fontSize: '14px',
+const pillarValue: React.CSSProperties = {
+  fontSize: '13px',
+  color: C.muted,
+  fontVariantNumeric: 'tabular-nums',
+  paddingBottom: '6px',
+}
+
+const barTrack: React.CSSProperties = {
+  width: '100%',
+  height: '8px',
+  backgroundColor: C.surface,
+  borderRadius: '999px',
+  overflow: 'hidden',
+  borderCollapse: 'separate',
+  tableLayout: 'fixed',
+}
+
+const barFill: React.CSSProperties = {
+  backgroundColor: C.primary,
+  height: '8px',
+  fontSize: 0,
+  lineHeight: '8px',
+  borderRadius: '999px',
+}
+
+const priorityCard: React.CSSProperties = {
+  backgroundColor: C.primarySoft,
+  borderRadius: '20px',
+  border: `1px solid ${C.border}`,
+  padding: '28px 24px',
+  marginBottom: '16px',
+}
+
+const priorityTitle: React.CSSProperties = {
+  fontFamily: 'Georgia, "Times New Roman", serif',
+  fontSize: '28px',
+  lineHeight: 1.2,
+  color: C.primary,
+  margin: '8px 0 14px',
+  fontWeight: 600,
+}
+
+const priorityParagraph: React.CSSProperties = {
+  fontSize: '15px',
   lineHeight: 1.6,
-  color: '#30434f',
-  margin: '0 0 8px',
+  color: C.text2,
+  margin: '0 0 10px',
+}
+
+const quickWinsKicker: React.CSSProperties = {
+  fontSize: '12px',
+  letterSpacing: '0.14em',
+  textTransform: 'uppercase',
+  color: C.primary,
+  fontWeight: 700,
+  margin: '24px 0 12px',
 }
 
 const winCard: React.CSSProperties = {
-  backgroundColor: '#e4e3e2',
-  borderRadius: '10px',
-  borderLeft: '3px solid #859CA6',
-  padding: '12px 14px',
-  margin: '0 0 10px',
+  backgroundColor: C.white,
+  borderRadius: '12px',
+  border: `1px solid ${C.border}`,
+  marginBottom: '10px',
 }
-const winText: React.CSSProperties = {
-  fontSize: '13px',
-  color: '#30434f',
-  margin: 0,
-  lineHeight: 1.55,
+
+const winBadgeCell: React.CSSProperties = {
+  width: '78px',
+  padding: '14px 0 14px 14px',
+  verticalAlign: 'top',
 }
+
 const winBadge: React.CSSProperties = {
   display: 'inline-block',
-  backgroundColor: '#30434f',
-  color: '#ffffff',
-  fontWeight: 600,
-  fontSize: '10px',
-  padding: '2px 8px',
-  borderRadius: '6px',
-  marginRight: '8px',
+  backgroundColor: C.surface,
+  color: C.primary,
+  borderLeft: `3px solid ${C.accent}`,
+  fontSize: '11px',
+  fontWeight: 700,
   letterSpacing: '0.04em',
+  padding: '6px 10px',
+  borderRadius: '6px',
   textTransform: 'uppercase',
+  whiteSpace: 'nowrap',
+}
+
+const winTextCell: React.CSSProperties = {
+  padding: '14px 16px 14px 12px',
+  fontSize: '14px',
+  lineHeight: 1.55,
+  color: C.text,
+  verticalAlign: 'top',
 }
 
 const ctaCard: React.CSSProperties = {
-  margin: '20px 32px 28px',
-  backgroundColor: '#30434f',
-  borderRadius: '14px',
-  padding: '24px 26px',
+  backgroundColor: C.primary,
+  borderRadius: '20px',
+  padding: '28px 24px',
+  marginBottom: '20px',
 }
+
 const ctaKicker: React.CSSProperties = {
   fontSize: '11px',
   letterSpacing: '0.18em',
   textTransform: 'uppercase',
-  color: '#859CA6',
+  color: C.accent,
   fontWeight: 600,
   margin: 0,
 }
+
 const ctaTitle: React.CSSProperties = {
   fontFamily: 'Georgia, "Times New Roman", serif',
-  fontSize: '20px',
-  color: '#ffffff',
-  margin: '6px 0 10px',
+  fontSize: '26px',
+  lineHeight: 1.2,
+  color: C.white,
+  margin: '8px 0 12px',
   fontWeight: 600,
 }
+
 const ctaParagraph: React.CSSProperties = {
-  fontSize: '14px',
+  fontSize: '15px',
   lineHeight: 1.6,
-  color: '#e4e3e2',
-  margin: '0 0 16px',
+  color: C.surface,
+  margin: '0 0 20px',
 }
+
 const ctaButton: React.CSSProperties = {
   display: 'inline-block',
-  backgroundColor: '#859CA6',
-  color: '#ffffff',
+  backgroundColor: C.accent,
+  color: C.white,
   textDecoration: 'none',
-  fontWeight: 600,
-  fontSize: '14px',
-  padding: '12px 20px',
+  fontWeight: 700,
+  fontSize: '15px',
+  padding: '14px 22px',
   borderRadius: '10px',
 }
+
 const ctaFooter: React.CSSProperties = {
-  fontSize: '12px',
-  color: '#e4e3e2',
-  marginTop: '12px',
+  fontSize: '13px',
+  color: C.surface,
+  marginTop: '14px',
   marginBottom: 0,
   opacity: 0.85,
 }
 
-const hr: React.CSSProperties = { borderColor: '#e4e3e2', margin: '0 32px' }
 const footer: React.CSSProperties = {
-  padding: '18px 32px 28px',
   fontSize: '12px',
-  color: '#687a82',
-  margin: 0,
+  color: C.muted,
+  textAlign: 'center',
+  margin: '8px 12px 0',
   lineHeight: 1.6,
 }
