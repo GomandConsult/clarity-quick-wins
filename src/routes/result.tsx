@@ -134,7 +134,7 @@ function Result() {
                     key={i}
                     className="flex gap-4 rounded-xl border border-border bg-card p-4"
                   >
-                    <span className="flex h-7 shrink-0 items-center rounded-md border border-muted-foreground/40 bg-secondary px-2 text-xs font-semibold text-primary border-l-4 border-l-accent">
+                    <span className="flex h-7 shrink-0 items-center rounded-md border border-muted-foreground/40 bg-secondary text-xs font-semibold text-primary border-l-4 border-l-accent px-[8px] border-none">
                       {qw.time}
                     </span>
                     <span className="text-sm leading-relaxed">{qw.text}</span>
