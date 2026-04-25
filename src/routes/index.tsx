@@ -23,28 +23,34 @@ function Landing() {
             Diagnostic marketing · 5 minutes
           </div>
 
-          <h1 className="mt-6 text-4xl font-semibold leading-[1.05] sm:text-6xl">
+          <h1 className="mt-5 text-[2rem] font-semibold leading-[1.05] sm:mt-6 sm:text-6xl">
             Trouvez votre priorité marketing&nbsp;<span className="text-primary">#1</span>
             <span className="block text-muted-foreground/90 italic font-normal mt-1">
               (et arrêtez de vous disperser).
             </span>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            10 questions rapides pour prioriser l'essentiel. Vous recevez un mini-rapport avec votre score,
-            votre priorité #1 et 3 quick wins adaptés à votre situation.
+          <p className="mt-4 text-base font-medium text-foreground sm:text-lg">
+            Score + priorité #1 + 3 quick wins.
           </p>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            10 questions rapides pour prioriser l'essentiel et un mini-rapport adapté à votre situation.
+          </p>
+
+          <div className="mt-7 flex flex-col gap-3 sm:mt-10">
             <Link
               to="/diagnostic"
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[var(--shadow-elevated)] transition-all hover:translate-y-[-1px] hover:shadow-[var(--shadow-elevated)]"
+              className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-6 py-3.5 text-base font-medium text-primary-foreground shadow-[var(--shadow-elevated)] transition-all hover:translate-y-[-1px] hover:shadow-[var(--shadow-elevated)] sm:w-auto sm:self-start"
             >
-              Commencer (5 minutes)
+              Commencer le diagnostic
               <span className="ml-2">→</span>
             </Link>
             <p className="text-sm text-muted-foreground">
-              Gratuit · Résultat immédiat · Rapport envoyé par email
+              5 minutes · 10 questions · résultat immédiat
+            </p>
+            <p className="text-xs text-muted-foreground/80">
+              Accès libre · Résultat immédiat · Rapport envoyé par email
             </p>
           </div>
 
