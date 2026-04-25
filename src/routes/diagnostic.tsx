@@ -55,7 +55,7 @@ function Diagnostic() {
             </div>
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
               <div
-                className="h-full bg-primary transition-all duration-500 ease-out"
+                className="h-full bg-accent transition-all duration-500 ease-out"
                 style={{ width: `${((step + (allAnsweredOnStep ? 1 : 0)) / STEPS.length) * 100}%` }}
               />
             </div>
