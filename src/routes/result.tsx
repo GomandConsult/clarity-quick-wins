@@ -16,18 +16,13 @@ export const Route = createFileRoute("/result")({
 
 function Result() {
   const [result, setResult] = useState<DiagnosticResult | null>(null);
-  const [answers, setAnswers] = useState<Record<number, number> | null>(null);
-  const [email, setEmail] = useState("");
-  const [consent, setConsent] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [sentTo, setSentTo] = useState<string | null>(null);
 
   useEffect(() => {
     const r = sessionStorage.getItem("mc_result");
-    const a = sessionStorage.getItem("mc_answers");
     if (r) setResult(JSON.parse(r));
-    if (a) setAnswers(JSON.parse(a));
+    const e = sessionStorage.getItem("mc_email_sent_to");
+    if (e) setSentTo(e);
   }, []);
 
   if (!result) {
@@ -52,34 +47,6 @@ function Result() {
   }
 
   const priority = PILLARS[result.priority];
-
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    if (!email || !email.includes("@")) {
-      setError("Merci d'indiquer un email valide.");
-      return;
-    }
-    if (!consent) {
-      setError("Merci d'accepter de recevoir le mini-rapport.");
-      return;
-    }
-    setSending(true);
-    try {
-      const res = await fetch("/api/send-report", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, result, answers }),
-      });
-      if (!res.ok) throw new Error("send_failed");
-      setSent(email);
-    } catch {
-      // Soft-fail: still confirm to user that we noted their email; the report is visible on screen.
-      setSent(email);
-    } finally {
-      setSending(false);
-    }
-  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
