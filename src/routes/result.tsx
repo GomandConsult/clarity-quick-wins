@@ -144,55 +144,7 @@ function Result() {
             </div>
           </div>
 
-          {/* Email capture */}
-          <div className="mt-6 rounded-3xl border border-border bg-card p-7 shadow-[var(--shadow-soft)] sm:p-9">
-            <h3 className="font-display text-2xl font-semibold">
-              Recevoir mon mini-rapport par email
-            </h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Une copie de votre score, votre priorité et vos 3 quick wins, directement dans votre boîte.
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Score + priorité #1 + 3 quick wins.
-            </p>
-
-            {sent ? (
-              <div className="mt-5 rounded-lg border border-success/30 bg-success/10 p-4 text-sm text-success">
-                ✓ Une copie de votre mini-rapport a été envoyée à <strong>{sent}</strong>.
-              </div>
-            ) : (
-              <form onSubmit={handleSend} className="mt-5 space-y-3">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="vous@entreprise.com"
-                  className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
-                <label className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                  <input
-                    type="checkbox"
-                    checked={consent}
-                    onChange={(e) => setConsent(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-input"
-                  />
-                  <span>
-                    J'accepte de recevoir mon mini-rapport par email. Vous pouvez vous désinscrire à tout moment.
-                  </span>
-                </label>
-                {error && <p className="text-sm text-destructive">{error}</p>}
-                <button
-                  type="submit"
-                  disabled={sending}
-                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-all hover:translate-y-[-1px] hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-50"
-                >
-                  {sending ? "Envoi…" : "Recevoir mon mini-rapport"}
-                </button>
-              </form>
-            )}
-          </div>
-
+          {/* Booking CTA continues below */}
           {/* Booking CTA */}
           <div className="mt-6 overflow-hidden rounded-3xl border border-primary bg-primary p-7 text-primary-foreground shadow-[var(--shadow-elevated)] sm:p-10">
             <div className="text-xs font-medium uppercase tracking-[0.18em] opacity-70">
