@@ -17,7 +17,7 @@ function Landing() {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--gradient-hero)" }}>
       <main className="flex-1">
-        <section className="mx-auto max-w-3xl px-5 pt-12 pb-20 sm:pt-20 sm:pb-28">
+        <section className="mx-auto max-w-3xl px-5 pt-6 pb-16 sm:pt-20 sm:pb-28">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             Diagnostic marketing · 5 minutes
