@@ -27,7 +27,7 @@ function Landing() {
 
           <h1 className="mt-6 text-4xl font-semibold leading-[1.05] sm:text-6xl">
             Trouvez votre priorité marketing&nbsp;<span className="text-primary">#1</span>
-            <span className="block text-muted-foreground/90 italic mt-1 text-5xl font-light">
+            <span className="block text-muted-foreground/90 italic mt-1 font-light text-4xl">
               (et arrêtez de vous disperser).
             </span>
           </h1>
