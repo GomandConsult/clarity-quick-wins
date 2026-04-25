@@ -118,7 +118,7 @@ function Result() {
                     </div>
                     <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-secondary">
                       <div
-                        className={isPriority ? "h-full bg-accent" : "h-full bg-primary/70"}
+                        className="h-full bg-primary"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -162,7 +162,7 @@ function Result() {
                     key={i}
                     className="flex gap-4 rounded-xl border border-border bg-card p-4"
                   >
-                    <span className="flex h-7 shrink-0 items-center rounded-md bg-primary px-2 text-xs font-semibold text-primary-foreground">
+                    <span className="flex h-7 shrink-0 items-center rounded-md border border-muted-foreground/40 bg-secondary px-2 text-xs font-semibold text-primary border-l-4 border-l-accent">
                       {qw.time}
                     </span>
                     <span className="text-sm leading-relaxed">{qw.text}</span>
