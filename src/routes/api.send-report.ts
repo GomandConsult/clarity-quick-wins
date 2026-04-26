@@ -1,14 +1,13 @@
 import * as React from 'react'
 import { render } from '@react-email/components'
-import { createClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 import { TEMPLATES } from '@/lib/email-templates/registry'
 
 const SITE_NAME = 'Gomand Consult'
-const SENDER_DOMAIN = 'notify.gomandconsult.com'
-const FROM_DOMAIN = 'notify.gomandconsult.com'
+const FROM_ADDRESS = `${SITE_NAME} <noreply@notify.gomandconsult.com>`
 const TEMPLATE_NAME = 'diagnostic-report'
+const RESEND_GATEWAY_URL = 'https://connector-gateway.lovable.dev/resend'
 
 const PillarKey = z.enum(['offer', 'audience', 'conversion', 'acquisition', 'measurement'])
 
@@ -28,14 +27,6 @@ const BodySchema = z.object({
   }),
 })
 
-function generateToken(): string {
-  const bytes = new Uint8Array(32)
-  crypto.getRandomValues(bytes)
-  return Array.from(bytes)
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('')
-}
-
 function redact(email: string): string {
   const [l, d] = email.split('@')
   if (!l || !d) return '***'
@@ -46,11 +37,11 @@ export const Route = createFileRoute('/api/send-report')({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+        const lovableApiKey = process.env.LOVABLE_API_KEY
+        const resendApiKey = process.env.RESEND_API_KEY
 
-        if (!supabaseUrl || !supabaseServiceKey) {
-          console.error('Missing required env vars')
+        if (!lovableApiKey || !resendApiKey) {
+          console.error('Missing email gateway credentials')
           return Response.json({ error: 'server_misconfigured' }, { status: 500 })
         }
 
@@ -71,66 +62,12 @@ export const Route = createFileRoute('/api/send-report')({
 
         const { email, result } = parsed.data
         const recipientEmail = email
-        const normalizedEmail = recipientEmail.toLowerCase()
-        const messageId = crypto.randomUUID()
-        const idempotencyKey = `diagnostic-report-${messageId}`
-
-        const supabase: any = createClient(supabaseUrl, supabaseServiceKey)
 
         const template = TEMPLATES[TEMPLATE_NAME]
         if (!template) {
           return Response.json({ error: 'template_not_found' }, { status: 500 })
         }
 
-        // 1. Suppression check
-        const { data: suppressed, error: suppressionError } = await supabase
-          .from('suppressed_emails')
-          .select('id')
-          .eq('email', normalizedEmail)
-          .maybeSingle()
-
-        if (suppressionError) {
-          console.error('Suppression check failed', { error: suppressionError })
-          return Response.json({ error: 'suppression_check_failed' }, { status: 500 })
-        }
-
-        if (suppressed) {
-          await supabase.from('email_send_log').insert({
-            message_id: messageId,
-            template_name: TEMPLATE_NAME,
-            recipient_email: recipientEmail,
-            status: 'suppressed',
-          })
-          return Response.json({ ok: true, suppressed: true })
-        }
-
-        // 2. Get or create unsubscribe token
-        let unsubscribeToken: string
-        const { data: existing } = await supabase
-          .from('email_unsubscribe_tokens')
-          .select('token, used_at')
-          .eq('email', normalizedEmail)
-          .maybeSingle()
-
-        if (existing && !existing.used_at) {
-          unsubscribeToken = existing.token
-        } else {
-          unsubscribeToken = generateToken()
-          await supabase
-            .from('email_unsubscribe_tokens')
-            .upsert(
-              { token: unsubscribeToken, email: normalizedEmail },
-              { onConflict: 'email', ignoreDuplicates: true },
-            )
-          const { data: stored } = await supabase
-            .from('email_unsubscribe_tokens')
-            .select('token')
-            .eq('email', normalizedEmail)
-            .maybeSingle()
-          if (stored?.token) unsubscribeToken = stored.token
-        }
-
-        // 3. Render template
         const element = React.createElement(template.component, {
           total: result.total,
           label: result.label,
@@ -139,54 +76,42 @@ export const Route = createFileRoute('/api/send-report')({
         })
         const html = await render(element)
         const plainText = await render(element, { plainText: true })
-        const resolvedSubject =
+        const subject =
           typeof template.subject === 'function'
             ? template.subject(result as any)
             : template.subject
 
-        // 4. Log pending then enqueue
-        await supabase.from('email_send_log').insert({
-          message_id: messageId,
-          template_name: TEMPLATE_NAME,
-          recipient_email: recipientEmail,
-          status: 'pending',
-        })
-
-        const { error: enqueueError } = await supabase.rpc('enqueue_email', {
-          queue_name: 'transactional_emails',
-          payload: {
-            message_id: messageId,
-            to: recipientEmail,
-            from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
-            sender_domain: SENDER_DOMAIN,
-            subject: resolvedSubject,
+        const resp = await fetch(`${RESEND_GATEWAY_URL}/emails`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${lovableApiKey}`,
+            'X-Connection-Api-Key': resendApiKey,
+          },
+          body: JSON.stringify({
+            from: FROM_ADDRESS,
+            to: [recipientEmail],
+            subject,
             html,
             text: plainText,
-            purpose: 'transactional',
-            label: TEMPLATE_NAME,
-            idempotency_key: idempotencyKey,
-            unsubscribe_token: unsubscribeToken,
-            queued_at: new Date().toISOString(),
-          },
+          }),
         })
 
-        if (enqueueError) {
-          console.error('Failed to enqueue email', { error: enqueueError })
-          await supabase.from('email_send_log').insert({
-            message_id: messageId,
-            template_name: TEMPLATE_NAME,
-            recipient_email: recipientEmail,
-            status: 'failed',
-            error_message: 'Failed to enqueue email',
+        if (!resp.ok) {
+          const errBody = await resp.text()
+          console.error('Resend send failed', {
+            status: resp.status,
+            body: errBody,
+            recipient_redacted: redact(recipientEmail),
           })
-          return Response.json({ error: 'enqueue_failed' }, { status: 500 })
+          return Response.json({ error: 'send_failed' }, { status: 502 })
         }
 
-        console.log('Diagnostic report enqueued', {
+        console.log('Diagnostic report sent via Resend', {
           recipient_redacted: redact(recipientEmail),
         })
 
-        return Response.json({ ok: true, queued: true })
+        return Response.json({ ok: true, sent: true })
       },
     },
   },
