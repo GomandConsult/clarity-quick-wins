@@ -64,7 +64,7 @@ function EmailGate() {
     setSubmitting(true);
     const cleanEmail = email.trim();
     try {
-      await fetch("/api/send-report", {
+      const resp = await fetch("/api/send-report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -74,12 +74,34 @@ function EmailGate() {
           marketingConsent,
         }),
       });
-    } catch {
-      // Soft-fail: still proceed to result, the report is visible on screen.
-    } finally {
+      if (!resp.ok) {
+        setSubmitting(false);
+        setError(
+          "Nous n'avons pas pu envoyer votre mini-rapport. Réessayez, ou consultez-le directement à l'écran.",
+        );
+        sessionStorage.setItem("mc_email_failed", "1");
+        sessionStorage.setItem("mc_email_attempt", cleanEmail);
+        sessionStorage.removeItem("mc_email_sent_to");
+        return;
+      }
       sessionStorage.setItem("mc_email_sent_to", cleanEmail);
+      sessionStorage.removeItem("mc_email_failed");
+      sessionStorage.removeItem("mc_email_attempt");
       navigate({ to: "/result" });
+    } catch {
+      setSubmitting(false);
+      setError(
+        "Connexion impossible. Réessayez, ou consultez votre mini-rapport directement à l'écran.",
+      );
+      sessionStorage.setItem("mc_email_failed", "1");
+      sessionStorage.setItem("mc_email_attempt", cleanEmail);
     }
+  };
+
+  const viewReportWithoutEmail = () => {
+    sessionStorage.setItem("mc_email_failed", "1");
+    if (email.trim()) sessionStorage.setItem("mc_email_attempt", email.trim());
+    navigate({ to: "/result" });
   };
 
   return (
@@ -146,7 +168,27 @@ function EmailGate() {
                 </span>
               </label>
 
-              {error && <p className="text-sm text-destructive">{error}</p>}
+              {error && (
+                <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+                  <p>{error}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="inline-flex items-center gap-2 rounded-md bg-destructive px-3 py-2 text-xs font-medium text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50"
+                    >
+                      Renvoyer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={viewReportWithoutEmail}
+                      className="inline-flex items-center gap-2 rounded-md border border-destructive/40 bg-background px-3 py-2 text-xs font-medium text-destructive hover:bg-destructive/5"
+                    >
+                      Voir mon mini-rapport à l'écran
+                    </button>
+                  </div>
+                </div>
+              )}
 
               <div className="flex flex-col gap-2">
                 <button

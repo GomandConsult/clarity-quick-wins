@@ -17,13 +17,52 @@ export const Route = createFileRoute("/result")({
 function Result() {
   const [result, setResult] = useState<DiagnosticResult | null>(null);
   const [sentTo, setSentTo] = useState<string | null>(null);
+  const [emailFailed, setEmailFailed] = useState(false);
+  const [attemptedEmail, setAttemptedEmail] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const r = sessionStorage.getItem("mc_result");
     if (r) setResult(JSON.parse(r));
     const e = sessionStorage.getItem("mc_email_sent_to");
     if (e) setSentTo(e);
+    const f = sessionStorage.getItem("mc_email_failed");
+    if (f === "1") setEmailFailed(true);
+    const a = sessionStorage.getItem("mc_email_attempt");
+    if (a) setAttemptedEmail(a);
   }, []);
+
+  const buildReportText = (r: DiagnosticResult): string => {
+    const priority = PILLARS[r.priority];
+    const lines: string[] = [];
+    lines.push(`Marketing Clarity — Mini-rapport`);
+    lines.push(`Score : ${r.total}/30 — ${r.label}`);
+    lines.push(``);
+    lines.push(`Scores par pilier :`);
+    (Object.keys(r.pillarScores) as Array<keyof typeof r.pillarScores>).forEach((k) => {
+      lines.push(`- ${PILLARS[k].name} : ${r.pillarScores[k]}/6`);
+    });
+    lines.push(``);
+    lines.push(`Point de départ : ${priority.name}`);
+    priority.explanation.forEach((l) => lines.push(l));
+    lines.push(``);
+    lines.push(`3 quick wins :`);
+    priority.quickWins.forEach((qw, i) => {
+      lines.push(`${i + 1}. [${qw.time}] ${qw.text}`);
+    });
+    return lines.join("\n");
+  };
+
+  const copyReport = async () => {
+    if (!result) return;
+    try {
+      await navigator.clipboard.writeText(buildReportText(result));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      setCopied(false);
+    }
+  };
 
   if (!result) {
     return (
@@ -53,9 +92,32 @@ function Result() {
       <BrandHeader />
       <main className="flex-1">
         <div className="mx-auto max-w-3xl px-5 py-10 sm:py-14">
-          {sentTo && (
+          {sentTo && !emailFailed && (
             <div className="mb-6 rounded-2xl border border-success/30 bg-success/10 p-4 text-sm text-success">
-              ✓ Une copie de votre mini-rapport a été envoyée à <strong>{sentTo}</strong>.
+              ✓ Email envoyé à <strong>{sentTo}</strong>.
+            </div>
+          )}
+          {emailFailed && (
+            <div className="mb-6 rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+              <p>
+                Nous n'avons pas pu envoyer votre mini-rapport
+                {attemptedEmail ? <> à <strong>{attemptedEmail}</strong></> : null}. Vous pouvez le consulter ci-dessous ou le copier.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Link
+                  to="/email"
+                  className="inline-flex items-center gap-2 rounded-md bg-destructive px-3 py-2 text-xs font-medium text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Renvoyer l'email
+                </Link>
+                <button
+                  type="button"
+                  onClick={copyReport}
+                  className="inline-flex items-center gap-2 rounded-md border border-destructive/40 bg-background px-3 py-2 text-xs font-medium text-destructive hover:bg-destructive/5"
+                >
+                  {copied ? "Copié ✓" : "Copier mon mini-rapport"}
+                </button>
+              </div>
             </div>
           )}
           {/* Score block */}
