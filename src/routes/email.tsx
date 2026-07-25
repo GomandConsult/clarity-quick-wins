@@ -168,7 +168,27 @@ function EmailGate() {
                 </span>
               </label>
 
-              {error && <p className="text-sm text-destructive">{error}</p>}
+              {error && (
+                <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+                  <p>{error}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="inline-flex items-center gap-2 rounded-md bg-destructive px-3 py-2 text-xs font-medium text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50"
+                    >
+                      Renvoyer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={viewReportWithoutEmail}
+                      className="inline-flex items-center gap-2 rounded-md border border-destructive/40 bg-background px-3 py-2 text-xs font-medium text-destructive hover:bg-destructive/5"
+                    >
+                      Voir mon mini-rapport à l'écran
+                    </button>
+                  </div>
+                </div>
+              )}
 
               <div className="flex flex-col gap-2">
                 <button
