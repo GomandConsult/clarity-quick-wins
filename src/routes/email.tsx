@@ -64,7 +64,7 @@ function EmailGate() {
     setSubmitting(true);
     const cleanEmail = email.trim();
     try {
-      await fetch("/api/send-report", {
+      const resp = await fetch("/api/send-report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -74,12 +74,34 @@ function EmailGate() {
           marketingConsent,
         }),
       });
-    } catch {
-      // Soft-fail: still proceed to result, the report is visible on screen.
-    } finally {
+      if (!resp.ok) {
+        setSubmitting(false);
+        setError(
+          "Nous n'avons pas pu envoyer votre mini-rapport. Réessayez, ou consultez-le directement à l'écran.",
+        );
+        sessionStorage.setItem("mc_email_failed", "1");
+        sessionStorage.setItem("mc_email_attempt", cleanEmail);
+        sessionStorage.removeItem("mc_email_sent_to");
+        return;
+      }
       sessionStorage.setItem("mc_email_sent_to", cleanEmail);
+      sessionStorage.removeItem("mc_email_failed");
+      sessionStorage.removeItem("mc_email_attempt");
       navigate({ to: "/result" });
+    } catch {
+      setSubmitting(false);
+      setError(
+        "Connexion impossible. Réessayez, ou consultez votre mini-rapport directement à l'écran.",
+      );
+      sessionStorage.setItem("mc_email_failed", "1");
+      sessionStorage.setItem("mc_email_attempt", cleanEmail);
     }
+  };
+
+  const viewReportWithoutEmail = () => {
+    sessionStorage.setItem("mc_email_failed", "1");
+    if (email.trim()) sessionStorage.setItem("mc_email_attempt", email.trim());
+    navigate({ to: "/result" });
   };
 
   return (
