@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      email_delivery_log: {
+        Row: {
+          bcc_email: string | null
+          created_at: string
+          environment: string | null
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          provider_message_id: string | null
+          report_priority: string | null
+          report_total: number | null
+          send_id: string
+          status: string
+          to_email: string
+        }
+        Insert: {
+          bcc_email?: string | null
+          created_at?: string
+          environment?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          provider_message_id?: string | null
+          report_priority?: string | null
+          report_total?: number | null
+          send_id?: string
+          status: string
+          to_email: string
+        }
+        Update: {
+          bcc_email?: string | null
+          created_at?: string
+          environment?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          provider_message_id?: string | null
+          report_priority?: string | null
+          report_total?: number | null
+          send_id?: string
+          status?: string
+          to_email?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
