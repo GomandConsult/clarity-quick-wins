@@ -22,7 +22,6 @@ function EmailGate() {
   const [answers, setAnswers] = useState<Record<number, number> | null>(null);
   const [email, setEmail] = useState("");
   const [transactionalConsent, setTransactionalConsent] = useState(false);
-  const [marketingConsent, setMarketingConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -71,7 +70,6 @@ function EmailGate() {
           email: cleanEmail,
           result,
           answers,
-          marketingConsent,
         }),
       });
       if (!resp.ok) {
@@ -150,21 +148,6 @@ function EmailGate() {
                 <span>
                   J'accepte de recevoir mon mini-rapport par email.{" "}
                   <span className="text-muted-foreground">(obligatoire)</span>
-                </span>
-              </label>
-
-              <label className="flex items-start gap-3 text-sm text-foreground/85">
-                <input
-                  type="checkbox"
-                  checked={marketingConsent}
-                  onChange={(e) => setMarketingConsent(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-input accent-primary"
-                />
-                <span>
-                  Je souhaite aussi recevoir des conseils marketing de Gomand Consult (1–2 emails/mois).
-                  <span className="block text-xs text-muted-foreground mt-0.5">
-                    Désinscription à tout moment.
-                  </span>
                 </span>
               </label>
 
