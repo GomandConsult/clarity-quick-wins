@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { TEMPLATES } from '@/lib/email-templates/registry'
 
 const SITE_NAME = 'Gomand Consult'
-const FROM_DOMAIN = 'notify.gomandconsult.com'
+const FROM_DOMAIN = 'clarity.gomandconsult.com'
 const FROM_ADDRESS = `${SITE_NAME} <noreply@${FROM_DOMAIN}>`
 const TEMPLATE_NAME = 'diagnostic-report'
 
