@@ -19,5 +19,5 @@ npm run dev
 
 1. Connecter ce dépôt sur [app.netlify.com](https://app.netlify.com) (New site from Git). Le build est déjà configuré via `netlify.toml` (`npm run build`).
 2. Dans Site settings → Environment variables, ajouter `RESEND_API_KEY` (et `SEND_REPORT_BCC` si besoin).
-3. Dans Resend, vérifier le domaine d'envoi `notify.gomandconsult.com` (ajout des enregistrements DNS fournis par Resend — SPF/DKIM).
+3. Dans Resend, vérifier le domaine d'envoi `clarity.gomandconsult.com` (ajout des enregistrements DNS fournis par Resend — SPF/DKIM).
 4. Dans Netlify → Domain management, ajouter le sous-domaine cible (ex. `clarity.gomandconsult.com`) puis pointer son DNS (CNAME) selon les instructions de Netlify.
