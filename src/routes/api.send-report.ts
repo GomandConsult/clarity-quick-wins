@@ -4,9 +4,10 @@ import { Resend } from 'resend'
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 import { TEMPLATES } from '@/lib/email-templates/registry'
+import { upsertClarityContact } from '@/lib/hubspot'
 
 const SITE_NAME = 'Gomand Consult'
-const FROM_DOMAIN = 'notify.gomandconsult.com'
+const FROM_DOMAIN = 'clarity.gomandconsult.com'
 const FROM_ADDRESS = `${SITE_NAME} <noreply@${FROM_DOMAIN}>`
 const TEMPLATE_NAME = 'diagnostic-report'
 
@@ -105,6 +106,31 @@ export const Route = createFileRoute('/api/send-report')({
           recipient_redacted: redact(recipientEmail),
           bcc_enabled: Boolean(bccEmail),
         })
+
+        // Best-effort CRM sync — the email already went out, so a HubSpot
+        // failure here shouldn't turn into a user-facing error.
+        if (process.env.HUBSPOT_KEY) {
+          try {
+            const now = String(Date.now())
+            await upsertClarityContact(recipientEmail, {
+              clarity_score: String(result.total),
+              clarity_level: result.label,
+              clarity_priority: result.priority,
+              clarity_score_offer: String(result.pillarScores.offer),
+              clarity_score_audience: String(result.pillarScores.audience),
+              clarity_score_conversion: String(result.pillarScores.conversion),
+              clarity_score_acquisition: String(result.pillarScores.acquisition),
+              clarity_score_measurement: String(result.pillarScores.measurement),
+              clarity_completed_at: now,
+              clarity_report_sent_at: now,
+            })
+          } catch (hubspotError) {
+            console.error('send-report: hubspot sync failed', {
+              recipient_redacted: redact(recipientEmail),
+              error: hubspotError instanceof Error ? hubspotError.message : hubspotError,
+            })
+          }
+        }
 
         return Response.json({ ok: true, message_id: data?.id })
       },
